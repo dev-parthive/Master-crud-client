@@ -1,5 +1,5 @@
-import { toast } from "react-toastify";
-
+import { ToastContainer ,toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Add = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -8,6 +8,7 @@ const Add = () => {
       price: parseInt(e.target.price.value),
       image: e.target.image.value,
     };
+    console.log(product)
 
     fetch("http://localhost:5000/product", {
       method: "POST",
@@ -17,10 +18,12 @@ const Add = () => {
       body: JSON.stringify(product)
     }).then(res => res.json())
     .then(data => {
-      if(data.success){
-        toast.success(data.message);
+      console.log(data)
+      if(data.succeess){
+        // alert("success")
+       toast("Product added in database")
       } else {
-        toast.error(data.error);
+        toast.error("Somethin went wrong");
       }
     })
     .catch(err => {
@@ -30,7 +33,7 @@ const Add = () => {
   };
   
   return (
-    <div className="py-32 px-10 min-h-screen w-full">
+    <div className="py-36 px-10  w-1/3 mx-auto my-auto">
       <div className="bg-white p-10 md:w-3/4 lg:w-1/2 mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="flex items-center mb-5">
@@ -70,10 +73,12 @@ const Add = () => {
           </div>
 
           <div className="text-right">
-            <button className="py-3 px-8 bg-green-400 text-white font-bold">Add</button>
+            {/* <button type="submit">Add</button> */}
+            <button type="submit"  className="p-4 bg-green-400 text-white font-bold ">Add</button>
           </div>
         </form>
       </div>
+            <ToastContainer/>
     </div>
   );
 };
