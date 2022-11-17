@@ -21,13 +21,13 @@ const Add = () => {
       console.log(data)
       if(data.succeess){
         // alert("success")
-       toast("Product added in database")
+       toast.success(`${data.message}`)
       } else {
-        toast.error("Somethin went wrong");
+        toast.error(`${data.error}`);
       }
     })
     .catch(err => {
-      toast.error(err.message);
+      toast.error(`${err.message}`);
     })
     
   };

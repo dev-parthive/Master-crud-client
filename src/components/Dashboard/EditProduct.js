@@ -1,55 +1,68 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 const EditProduct = () => {
-  const router = useParams();
-  const [product, setProduct] = useState({});
-  const { id } = router;
-  const navigate = useNavigate();
+  // useParams diye amra kon id ta edit korteci ata check korteci 
+  const router = useParams()
+  const {id} = router
+  const navigate = useNavigate()
+  const [product, setProduct] = useState({})
+  const [refresh, setRefresh] = useState(false)
+  useEffect(()=>{
 
-  useEffect(() => {
     fetch(`http://localhost:5000/product/${id}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          setProduct(data.data);
-        } else {
-          toast.error(data.error);
-        }
-      })
-      .catch((err) => toast.error(err.message));
-  }, [id]);
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const product = {
-      name: e.target.name.value,
-      price: e.target.price.value,
-      image: e.target.image.value
-    }
-
-    fetch(`http://localhost:5000/product/${id}`, {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json"
-      },
-      body: JSON.stringify(product)
-    }).then(res => res.json())
+    .then(res  => res.json())
     .then(data => {
+      console.log(data.data)
       if(data.success){
-        toast.success(data.message);
-        navigate("/dashboard/products")
-      } else {
-        toast.err(data.error)
+        // toast("data loaded")
+        setProduct(data.data)
+      }else{
+        toast(`${data.error}`)
       }
     })
-    .catch(err => toast.error(err.message))
+    .catch(err => toast(`${err.message}`))
+    
+  } ,[refresh, id]);
+  console.log(product)
+
+
+  const handleSubmit = async(event)=>{
+    event.preventDefault()
+    // const form = event.target ;
+    // const name = form.name.value ;
+    // const price = form.price.value;
+    // const image = form.image.text;
+const product  = {
+  name: event.target.name.value,
+  price: event.target.price.value,
+  image: event.target.image.value,
   }
-  
+  console.log(product) 
+
+  // akn new data fetch kore server a patai dibo 
+  fetch(`http://localhost:5000/product/${id}`, {
+    method: "PATCH", 
+    headers: {
+      "content-type" : "application/json"
+    },
+    body: JSON.stringify(product)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.success){
+      toast.success(`${data.message}`)
+      navigate("/dashboard/products")
+    }else{
+      toast.error(`${data.error}`)
+    }
+  })
+  .catch(err => toast.error(`${err.message}`))
+
+  }
   return (
-    <div className="py-32 px-10 min-h-screen w-full">
+    <div className="py-36 px-10  w-1/3 mx-auto my-auto">
       <div className="bg-white p-10 md:w-3/4 lg:w-1/2 mx-auto">
         <form onSubmit={handleSubmit}>
           <div className="flex items-center mb-5">
@@ -60,8 +73,7 @@ const EditProduct = () => {
               type="text"
               name="name"
               placeholder="Name"
-              defaultValue={product?.name}
-              className="flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none"
+              className="flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none" defaultValue={product?.name}
             />
           </div>
 
@@ -73,8 +85,7 @@ const EditProduct = () => {
               type="text"
               name="price"
               placeholder="price"
-              defaultValue={product?.price}
-              className="flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none"
+              className="flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none" defaultValue={product?.price}
             />
           </div>
 
@@ -86,17 +97,19 @@ const EditProduct = () => {
               type="text"
               name="image"
               placeholder="url"
-              defaultValue={product?.image}
-              className="flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none"
+              className="flex-1 py-2 border-b-2 border-gray-400 focus:border-green-400 text-gray-600 placeholder-gray-400 outline-none" defaultValue={product?.image}
             />
-            <img src={product?.image} className="w-20" alt="" />
+         
+           <> <img style={{width: '100px'}} src={product?.image} alt="" /></>
           </div>
 
           <div className="text-right">
-            <button className="py-3 px-8 bg-green-400 text-white font-bold">Add</button>
+            {/* <button type="submit">Add</button> */}
+            <button type="submit"  className="p-4 bg-green-400 text-white font-bold ">Add</button>
           </div>
         </form>
       </div>
+            {/* <ToastContainer/> */}
     </div>
   );
 };
