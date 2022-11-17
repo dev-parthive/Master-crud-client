@@ -9,7 +9,7 @@ const AllProducts = () => {
   const [refresh, setRefresh] = useState(false)
   useEffect(()=>{
 
-    fetch("http://localhost:5000/product")
+    fetch("https://master-crud-server.vercel.app/product")
     .then(res  => res.json())
     .then(data => {
       console.log(data.data)
@@ -35,7 +35,7 @@ const handleEdit = (id)=> {
 
 const handleDelete = (id) =>{
   // console.log("Delete button is clicked", id)
-  fetch(`http://localhost:5000/product/${id}`, {
+  fetch(`https://master-crud-server.vercel.app/product/${id}`, {
     method: "DELETE",
   }).then(res => res.json())
   .then(data =>{

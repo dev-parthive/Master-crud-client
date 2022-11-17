@@ -10,7 +10,7 @@ const Add = () => {
     };
     console.log(product)
 
-    fetch("http://localhost:5000/product", {
+    fetch("https://master-crud-server.vercel.app/product", {
       method: "POST",
       headers: {
         "content-type": "application/json"

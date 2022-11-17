@@ -11,7 +11,7 @@ const EditProduct = () => {
   const [refresh, setRefresh] = useState(false)
   useEffect(()=>{
 
-    fetch(`http://localhost:5000/product/${id}`)
+    fetch(`https://master-crud-server.vercel.app/product/${id}`)
     .then(res  => res.json())
     .then(data => {
       console.log(data.data)
@@ -42,7 +42,7 @@ const product  = {
   console.log(product) 
 
   // akn new data fetch kore server a patai dibo 
-  fetch(`http://localhost:5000/product/${id}`, {
+  fetch(`https://master-crud-server.vercel.app/product/${id}`, {
     method: "PATCH", 
     headers: {
       "content-type" : "application/json"
